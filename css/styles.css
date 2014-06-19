@@ -1,0 +1,46 @@
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800");
+.bold {
+  font-weight: 600;
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: url("../img/halftone.png");
+  margin: 0;
+  padding: 0;
+  color: #555;
+}
+.top.content {
+  padding-top: 70px;
+  background: #fff;
+  padding-bottom: 30px;
+}
+.main.container {
+  padding-top: 35px;
+}
+.container {
+  margin-left: 20px;
+}
+.sticky {
+  display: none;
+}
+@media only screen and (min-width: 1150px) {
+  .container {
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+  .sticky {
+    width: 170px;
+    display: inherit;
+    position: absolute;
+    left: 0px;
+  }
+}
+@media screen and (max-width: 620px) {
+  #app-search {
+    display: none;
+  }
+}
