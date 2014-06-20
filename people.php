@@ -1,46 +1,38 @@
-<div class="top content">
-    <div class="container">
-        <h1 class="ui dividing header"><i class="icon user"></i>People</h1>
-        <p>Manage the humans known to the guild, inside or out.</p>
-        <div class="ui segment"><i>You can find meanness in the least of creatures, but when God made man the devil was at his elbow. A creature that can do anything. Make a machine. And a machine to make the machine. And evil that can run itself a thousand years, no need to tend it.</i></div>
-    </div>
-</div>
-<div class="main container">
-    <h2 class="ui dividing header">Add a new contact</h2>
-    <div class="ui form segment">
-        <div class="two fields">
-            <div class="field">
-                <label>Nickname</label>
-                <div class="ui left labeled input">
-                    <input type="text" placeholder="Nickname">
-                    <div class="ui corner label"><i class="icon asterisk"></i></div>
-                </div>
-            </div>
-            <div class="field">
-                <label>Real name</label>
-                <div class="ui left input">
-                    <input type="text" placeholder="Real name">
-                </div>
-            </div>
-        </div>
-        <div class="field">
-            <label>Gender</label>
-            <div class="ui fluid selection dropdown">
-                <div class="text">Select</div>
-                <i class="dropdown icon"></i>
-                <input type="hidden" name="gender">
-                <div class="menu">
-                    <div class="item" data-value="male">Male</div>
-                    <div class="item" data-value="female">Female</div>
-                    <div class="item" data-value="cyborg">Cyborg</div>
-                </div>
-            </div>
-        </div>
-        <div class="ui blue submit button icon big">
-            <i class="icon add sign box"></i>
-            Add New
-        </div>
-    </div>
-</div>
 <script>
+var people = new Firebase('https://broforce.firebaseio.com/people');
+</script>
+<div class="top content">
+    <div class="ui page grid">
+        <div class="row">
+            <div class="column">
+                <h1 class="ui dividing header"><i class="icon user"></i>People</h1>
+                <div class="ui two column stackable grid middle aligned">
+                    <div class="column">Manage the humans known to the organization, inside or out.</div>
+                    <div class="column float right">
+                        <div class="ui button center inline"
+                            data-bind="click: AddPersonStartModal">
+                            Add new contact
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ui message italic">
+                    You can find meanness in the least of creatures, but when God made man the devil was at his elbow. A creature that can do anything. Make a machine. And a machine to make the machine. And evil that can run itself a thousand years, no need to tend it.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include 'browse-people.php' ?>
+<?php include 'add-person-form.php' ?>
+
+<script>
+function AddPersonStartModal()
+{
+ClearModal();
+$(".modal").modal("show");
+}
+$('.search.button').click(function(){
+$('.people.sidebar').sidebar('toggle');
+});
 </script>

@@ -10,11 +10,18 @@
         <script src="http://knockoutjs.com/downloads/knockout-3.1.0.debug.js"></script>
         <script src="js/vendor/jquery.scrollTo.min.js"></script>
         <script src="js/vendor/jquery.sticky.js"></script>
+        <script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+        <!-- Our stuff -->
         <link rel="stylesheet" href="css/styles.css">
         <script src="js/main.js"></script>
+        <script src="js/mainViewModel.js"></script>
+        <script>
+            var viewmodel = new MainViewModel();
+            var root = new Firebase('https://broforce.firebaseio.com/');
+        </script>
     </head>
     <body>
-        <div class="ui large inverted vertical sidebar menu borderless">
+        <div class="ui large inverted vertical sidebar nav menu">
             <div class="item header"><img src="img/atb3.png" height="90%" width="90%"></div>
             <div class="header item">Roster <i class="icon users"></i></div>
             <a class="item" href="index.php?page=people">People</a>
@@ -38,14 +45,7 @@
             <div class="container">
                 <div class="title item">ATB Web Toolkit</div>
                 <div class="item small">Version 1</div>
-                <div class="right menu" id="app-search">
-                    <div class="item">
-                        <div class="ui icon input small">
-                            <input type="text" placeholder="Search...">
-                            <i class="search inverted icon"></i>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
         <?php include "$page.php"; ?>
@@ -53,7 +53,7 @@
     <script>
     $('.sidebar').sidebar();
     $('.launch').click(function(){
-    $('.sidebar').sidebar('toggle');
+    $('.sidebar.nav').sidebar('toggle');
     });
     $('.ui.dropdown')
     .dropdown()
@@ -68,5 +68,9 @@
     $(this).addClass('active');
     });
     $('.sticky').sticky({topSpacing: 44});
+
+    $(function(){
+        ko.applyBindings(viewmodel);
+    });
     </script>
 </html>
