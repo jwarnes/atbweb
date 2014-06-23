@@ -11,12 +11,14 @@
         <script src="js/vendor/jquery.scrollTo.min.js"></script>
         <script src="js/vendor/jquery.sticky.js"></script>
         <script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+        <script src="js/vendor/jquery.address.min.js"></script>
         <!-- Our stuff -->
         <link rel="stylesheet" href="css/styles.css">
         <script src="js/main.js"></script>
         <script src="js/mainViewModel.js"></script>
         <script>
             var viewmodel = new MainViewModel();
+            var vm = viewmodel;
             var root = new Firebase('https://broforce.firebaseio.com/');
         </script>
     </head>
@@ -51,26 +53,27 @@
         <?php include "$page.php"; ?>
     </body>
     <script>
-    $('.sidebar').sidebar();
-    $('.launch').click(function(){
-    $('.sidebar.nav').sidebar('toggle');
-    });
-    $('.ui.dropdown')
-    .dropdown()
-    ;
-    var page = <?php echo "'$page'"; ?>;
-    $(".sidebar a.item:contains('"+page.capitalize()+"')").addClass("active");
-    $('.scroll').click(function(){
-    var to = '#' + $(this).attr('to');
-    $.scrollTo(to,{offset: {top: -100}, duration: 300});
-    $('.scroll').removeClass('active');
-    
-    $(this).addClass('active');
-    });
-    $('.sticky').sticky({topSpacing: 44});
+        $('.sidebar').sidebar();
+        $('.launch').click(function(){
+            $('.sidebar.nav').sidebar('toggle');
+        });
+        $('.ui.dropdown')
+        .dropdown()
+        ;
+        var page = <?php echo "'$page'"; ?>;
+        $(".sidebar a.item:contains('"+page.capitalize()+"')").addClass("active");
+        $('.scroll').click(function(){
+            var to = '#' + $(this).attr('to');
+            $.scrollTo(to,{offset: {top: -100}, duration: 300});
+            $('.scroll').removeClass('active');
 
-    $(function(){
-        ko.applyBindings(viewmodel);
-    });
+            $(this).addClass('active');
+        });
+        $('.sticky').sticky({topSpacing: 44});
+
+        $('.ui.checkbox').checkbox();
+        $(function(){
+            ko.applyBindings(viewmodel);
+        });
     </script>
 </html>

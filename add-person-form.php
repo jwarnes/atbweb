@@ -26,32 +26,32 @@
             <button class="ui button blue big" 
             data-bind="enable: nickname().length > 0, css: {disabled: nickname().length < 1}, click: GetStarted">
             Get Started
-            </button>
-            <div class="or"></div>
-            <button class="ui button positive big"
-            data-bind="enable: nickname().length > 0, css: {disabled: nickname().length < 1}, click: QuickAdd">
-            Quick Add
-            </button>
-        </div>
-    </div>
+        </button>
+        <div class="or"></div>
+        <button class="ui button positive big"
+        data-bind="enable: nickname().length > 0, css: {disabled: nickname().length < 1}, click: QuickAdd">
+        Quick Add
+    </button>
+</div>
+</div>
 </div>
 
 <script>
-viewmodel.nickname = ko.observable('');
-viewmodel.realname = ko.observable('');
+    viewmodel.nickname = ko.observable('');
+    viewmodel.realname = ko.observable('');
 
-function QuickAdd()
-{
-people.push({nickname: viewmodel.nickname(), realname: viewmodel.realname()});
-}
-function GetStarted()
-{
-var newPersonRef = people.push({nickname: viewmodel.nickname(), realname: viewmodel.realname()});
-console.log(newPersonRef);
-}
-function ClearModal()
-{
-viewmodel.nickname('');
-viewmodel.realname('');
-}
+    function QuickAdd()
+    {
+        people.push({nickname: viewmodel.nickname(), realname: viewmodel.realname()});
+    }
+    function GetStarted()
+    {
+        var newPersonRef = people.push({nickname: viewmodel.nickname(), realname: viewmodel.realname()});
+        console.log(newPersonRef);
+    }
+    function ClearModal()
+    {
+        viewmodel.nickname('');
+        viewmodel.realname('');
+    }
 </script>
