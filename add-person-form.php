@@ -1,4 +1,4 @@
-<div class="ui small modal">
+<div class="ui small modal" id="add-person-modal">
     <i class="close icon"></i>
     <h2 class="dividing header green">Add new contact</h2>
     <div class="ui form segment">
@@ -6,7 +6,7 @@
             <div class="field">
                 <label>Nickname</label>
                 <div class="ui left labeled input">
-                    <input type="text" placeholder="Nickname" data-bind="value: nickname, valueUpdate: 'afterkeydown'">
+                    <input type="text" placeholder="Nickname" id="add-nickname" data-bind="value: nickname, valueUpdate: 'afterkeydown'">
                     <div class="ui corner label"><i class="icon asterisk"></i></div>
                 </div>
             </div>

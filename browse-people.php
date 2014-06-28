@@ -3,16 +3,20 @@
         <div class="ui menu floated right" id="search-wrapper">
             <div class="ui red huge left attached button icon search"><i class="icon search"></i></div>
         </div>
-        <div class="ui right wide sidebar inverted red vertical menu people">
+        <div class="ui right wide floating overlay sidebar inverted red vertical menu people">
             <div class="header item">
-                <div class="ui labeled fluid input">
-                    <input type="text" placeholder="Search..." data-bind="value: filter, valueUpdate: 'afterkeydown'">
+                <div class="ui labeled fluid input" data-bind="visible: authenticated()">
+                    <input type="text" placeholder="Search by real name or nickname" data-bind="value: filter, valueUpdate: 'afterkeydown'">
                     <div class="ui corner label"><i class="search icon"></i></div>
+                </div>
+                <div class="ui inverted message red icon" data-bind="visible: !authenticated()">
+                <i class="icon warning small"></i>
+                    You are not logged in. Log in to access information.
                 </div>
             </div>
             <!-- ko foreach: peopleFiltered -->
-            <a class="item person" data-bind="text: nickname, click: LoadPerson,
-            css: {active: $root.person().nickname == nickname}"></a>
+            <a class="item person" data-bind="text: realname, click: LoadPerson,
+            css: {active: $root.person().nickname == nickname}, visible: $root.authenticated()"></a>
             <!-- /ko -->
         </div>
     </div>
@@ -79,11 +83,11 @@
                         <div class="three fields">
                             <div class="field">
                                 <label for="">Phone</label>
-                                <input type="text" placeholder="(888) 345 6789"></input>
+                                <input type="text" placeholder="(888) 345 6789"/>
                             </div>
                             <div class="field">
                                 <label for="">Battletag</label>
-                                <input type="text" placeholder="#SpudLuvr1263"></input>
+                                <input type="text" placeholder="#SpudLuvr1263"/>
                             </div>
                             <div class="field">
                                 <label>Timezone</label>
@@ -147,11 +151,6 @@
     viewmodel.people = ko.observableArray([]);
     viewmodel.filter = ko.observable('');
 
-    people.on('child_added', function(data){
-        var personData = data.val();
-        viewmodel.people.push(personData);
-    });
-
     viewmodel.peopleFiltered = ko.computed(function(){
          var filter = vm.filter().toLowerCase();
          if (!filter) return vm.people();
@@ -173,4 +172,5 @@
     };
 
     $(".contact.menu .item").tab();
+    $('.overlay.sidebar').sidebar({overlay: true});
 </script>
