@@ -42,12 +42,12 @@
 
     function QuickAdd()
     {
-        people.push({nickname: viewmodel.nickname(), realname: viewmodel.realname()});
+        var ref = new Firebase('https://broforce.firebaseio.com/people');
+        ref.child(viewmodel.nickname()).set({public: {nickname: viewmodel.nickname(), realname: viewmodel.realname()}});
+        ref.child('list/'+viewmodel.nickname()).set({nickname: viewmodel.nickname()});
     }
     function GetStarted()
     {
-        var newPersonRef = people.push({nickname: viewmodel.nickname(), realname: viewmodel.realname()});
-        console.log(newPersonRef);
     }
     function ClearModal()
     {

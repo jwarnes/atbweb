@@ -1,4 +1,6 @@
-<?php $page = $_GET['page'] ?:  'people'; ?>
+<?php $page = $_GET['page'] ?:  'people';
+    
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,11 +55,11 @@
             <div class="title item">ATB Web Toolkit</div>
             <div class="item small">Version 1</div>
             <div class="ui menu right black inverted">
-                <div class="item" data-bind="visible: authenticated()"><span>Logged in as </span><span data-bind="text: email"/></div>
+                <div class="item" data-bind="css: {show: authenticated(), hide: !authenticated()}"><span>Logged in as </span><span data-bind="text: email"/></div>
                 <div class="ui button item black inverted float right login" data-bind="visible: !authenticated()">
                     <i class="sign in icon"></i>Login
                 </div>
-                <div class="ui button item black inverted float right" data-bind="visible: authenticated(), click: LogMeOut" >
+                <div class="ui button item black inverted float right logout" data-bind="visible: authenticated(), click: LogMeOut" >
                     <i class="sign out icon"></i>Logout
                 </div>
             </div>
@@ -65,7 +67,11 @@
     </div>
     <?php include "login-modal.php"; ?>
 
-    <?php include "$page.php"; ?>
+    <?php
+ 
+     file_exists("$page.php") ? include "$page.php" : include 'notyet.php';
+
+     ?>
 
 
 </body>

@@ -16,6 +16,9 @@ body {
   padding: 0;
   color: #555;
 }
+.top.padding {
+  padding-top: 70px !important;
+}
 .top.content {
   padding-top: 70px !important;
   background: #fff;
@@ -53,4 +56,14 @@ body {
 }
 .people.list.item {
   cursor: pointer;
+}
+.login.button {
+  width: 128px;
+}
+.show {
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+.hide {
+  opacity: 0;
 }

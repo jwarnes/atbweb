@@ -8,7 +8,7 @@
                     <div class="column">Manage the humans known to the organization, inside or out.</div>
                     <div class="column float right">
                         <button class="ui button center inline"
-                        data-bind="click: AddPersonStartModal, enable: authenticated(), css {disabled: !authenticated()}">
+                        data-bind="click: AddPersonStartModal, enable: permissions().canSeeContactInfo, css {disabled: !permissions().canSeeContactInfo}">
                         Add new contact
                     </button>
                 </div>
