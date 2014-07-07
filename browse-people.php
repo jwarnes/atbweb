@@ -67,10 +67,10 @@
                             </div>
                             <div class="field">
                                 <label>Gender</label>
-                                <div class="ui fluid selection dropdown">
-                                    <div class="text">Select</div>
+                                <div class="ui fluid selection dropdown gender">
+                                    <div class="text" data-bind="text: person().gender().capitalize()">Select</div>
                                     <i class="dropdown icon"></i>
-                                    <input type="hidden" name="gender">
+                                    <input type="hidden" name="gender" data-bind="value: person().gender">
                                     <div class="menu">
                                         <div class="item" data-value="male">Male</div>
                                         <div class="item" data-value="female">Female</div>
@@ -79,8 +79,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="field"><div class="ui checkbox"><input type="checkbox"><label>Guild Member</label></div></div>
-                        <div class="field"><div class="ui checkbox"><input type="checkbox"><label>Active Player</label></div></div>
+                        <div class="field"><div class="ui checkbox"><input data-bind="checked: person().isGuildMember" type="checkbox" id="isGuildMember"><label>Guild Member</label></div></div>
+                        <div class="field"><div class="ui checkbox"><input data-bind="checked: person().isActive" type="checkbox" id="isActive"><label>Active Player</label></div></div>
                         <div class="ui horizontal icon divider"><i class="icon basic chat"></i></div>
 
                         <div class="three fields">
@@ -90,20 +90,20 @@
                             </div>
                             <div class="field">
                                 <label for="">Battletag</label>
-                                <input data-bind="" type="text" placeholder="#SpudLuvr1263"/>
+                                <input data-bind="value: person().battletag" type="text" placeholder="SpudLuvr#1234"/>
                             </div>
                             <div class="field">
                                 <label>Timezone</label>
-                                <div class="ui fluid selection dropdown">
-                                    <div class="text">Select</div>
+                                <div class="ui fluid selection dropdown timezone">
+                                    <div class="text" data-bind="text: person().timezone">Select</div>
                                     <i class="dropdown icon"></i>
-                                    <input type="hidden" name="timezone">
+                                    <input type="hidden" name="timezone" data-bind="value: person().timezone">
                                     <div class="menu">
-                                        <div class="item" data-value="est">EST</div>
-                                        <div class="item" data-value="cdt">CDT</div>
-                                        <div class="item" data-value="mdt">MDT</div>
-                                        <div class="item" data-value="pdt">PDT</div>
-                                        <div class="item" data-value="other">Other</div>
+                                        <div class="item" data-value="EST">EST</div>
+                                        <div class="item" data-value="CDT">CDT</div>
+                                        <div class="item" data-value="MDT">MDT</div>
+                                        <div class="item" data-value="PDT">PDT</div>
+                                        <div class="item" data-value="Other">Other</div>
                                     </div>
                                 </div>
                             </div>
@@ -114,12 +114,19 @@
                             <div data-bind="template: {name: permissions().canSeeContactInfo ? 'contact-notes' : 'locked-area'}"></div>
                         <div class="ui divider"></div>
 
+                        <div class="ui attached success message">
+                            <i class="close icon"></i>
+                            <div class="header">Changes saved.</div>
+                        </div>
+
                         <div class="2 fluid ui buttons">
-                            <button class="ui positive button big">Save Changes</button>
+                            <button class="ui positive save button big" 
+                            data-bind="enable: permissions().canEditContacts, css: { disabled: !permissions().canEditContacts}, click: SavePerson">Save Changes</button>
                             <div class="or"></div>
-                            <button class="ui negative button big">Revert Changes</button>
+                            <button class="ui negative button big" data-bind="click: ReloadPerson">Revert Changes</button>
                         </div>
                     </div>
+                </div>
 
                     <div class="ui tab" data-tab="summary">
                         <div class="ui message">
@@ -150,12 +157,12 @@
         </div>
     </div>
 </div>
-
+</div>
 
 <script type="text/html" id="locked">
     <div class="ui left labeled input icon">
         <i class="icon lock"></i>
-        <input type="text" placeholder="Director level access required" disabled>
+        <input type="text" placeholder="Director access required" disabled>
     </div>
 </script>
 
@@ -171,21 +178,22 @@
 </script>
 
 <script type="text/html" id="birthday">
-    <div class="ui left input"><input data-bind="" type="text" placeholder="Birthday"></div>
+    <div class="ui left input"><input data-bind="value: person().birthday" type="text" placeholder="Birthday"></div>
 </script>
 
 <script type="text/html" id="contact-notes">
-    <textarea placeholder="e.g., don't call after 10pm"></textarea>
+    <textarea data-bind="value: person().notes" placeholder="e.g., don't call after 10pm"></textarea>
 </script>
 
 <script type="text/html" id="locked-area">
-    <textarea disabled placeholder="Director level access required."></textarea>
+    <textarea disabled placeholder="Director access required."></textarea>
 </script>
 
 <script>
     viewmodel.person = ko.observable(new Person());
     viewmodel.people = ko.observableArray([]);
     viewmodel.filter = ko.observable('');
+    viewmodel.previousNickname = ko.observable('');
 
     viewmodel.peopleFiltered = ko.computed(function(){
          var filter = vm.filter().toLowerCase();
@@ -202,14 +210,22 @@
     },viewmodel);
 
     LoadPerson = function(p){
+        viewmodel.previousNickname(p.nickname());
         var ref = new Firebase('https://broforce.firebaseio.com/people/'+p.nickname() );
 
         var p = new Person();
+
+        p.ref = ref;
 
         ref.child('public').once('value', function(data){  //public fields
             var d = data.val();
             p.nickname(d.nickname);
             p.joindate(d.joindate);
+            p.gender(d.gender || 'Select');
+            p.isGuildMember(d.isGuildMember || false);
+            p.isActive(d.isActivePlayer || false);
+            p.timezone(d.timezone || 'Select');
+            p.battletag(d.battletag);
         } );
 
         ref.child('private').once('value', function(data){  //private fields
@@ -217,6 +233,8 @@
             if(d){
                 p.realname(d.realname);
                 p.phone(d.phone);
+                p.birthday(d.birthday);
+                p.notes(d.contactNotes);
              }
         } );
         p.loaded(true);       
@@ -226,6 +244,40 @@
         $('.people.sidebar').sidebar('hide');
     };
 
+    SavePerson = function(){
+        $('.save.button').addClass("loading");
+        $('.save.button').addClass("disabled");
+        $('.save.button').prop("disabled", true);
+
+        var p = viewmodel.person();
+        var o = p.updateObject();
+
+        o.public.isGuildMember = $("#isGuildMember")[0].checked;
+        o.public.isActivePlayer = $("#isActive")[0].checked;
+
+        console.log("Saving...");
+        console.log(o);
+        p.ref.update(o, SavePersonSuccess);
+    };
+
+    SavePersonSuccess = function(){
+        $('.save.button').removeClass("loading");
+        $('.save.button').removeClass("disabled");
+        $('.save.button').prop("disabled", false);
+        console.log("Saved.")
+
+        $(".success.message").slideDown(200);
+    };
+
+    ReloadPerson = function(){
+        LoadPerson({nickname: viewmodel.previousNickname });
+    };
+
     $(".contact.menu .item").tab();
     $('.overlay.sidebar').sidebar({overlay: true});
+
+    $(".success.message").hide();
+
+    $(".success.message .close.icon").click(function(){ $(".success.message").slideUp(200); });
+
 </script>

@@ -40,14 +40,21 @@
     viewmodel.nickname = ko.observable('');
     viewmodel.realname = ko.observable('');
 
-    function QuickAdd()
+    function QuickAdd(callback)
     {
+        var callback = callback || function(){};
+
         var ref = new Firebase('https://broforce.firebaseio.com/people');
-        ref.child(viewmodel.nickname()).set({public: {nickname: viewmodel.nickname(), realname: viewmodel.realname()}});
+        ref.child(viewmodel.nickname()).set({public: {nickname: viewmodel.nickname()}, private: {realname: viewmodel.realname()} });
         ref.child('list/'+viewmodel.nickname()).set({nickname: viewmodel.nickname()});
+
+        callback();
     }
     function GetStarted()
     {
+        QuickAdd(function(){
+            LoadPerson({nickname: viewmodel.nickname});
+        });
     }
     function ClearModal()
     {
